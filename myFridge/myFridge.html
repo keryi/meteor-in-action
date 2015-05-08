@@ -27,5 +27,14 @@
 
 <template name="productList">
   <div id="supermarket" class="box">
+    <ul id="products">
+      {{#each products}}
+        <li>{{> productListItem}}</li>
+      {{/each}}
+    </ul>
   </div>
+</template>
+
+<template name="productListItem">
+  <img src="{{img}}" data-id="{{_id}}" class="image-responsive product-image draggable" />
 </template>

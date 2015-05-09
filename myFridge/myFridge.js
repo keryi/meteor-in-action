@@ -6,18 +6,61 @@ if (Meteor.isClient) {
       return Products.find({ place: 'fridge' });
     }
   });
+
+  Template.productList.helpers({
+    products: function() {
+      return Products.find({ place: 'supermarket' });
+    }
+  });
+
+  Template.fridge.rendered = function() {
+    var templateInstance = this;
+    templateInstance.$('#fridge').droppable({
+      drop: function(evt, ui) {
+        Products.update({ _id: ui.draggable.data('id') }, { $set:
+          {
+            place: 'fridge'
+          }
+        });
+      }
+    });
+  }
+
+  Template.productList.rendered = function() {
+    var templateInstance = this;
+    templateInstance.$('#supermarket').droppable({
+      drop: function(evt, ui) {
+        Products.update({ _id: ui.draggable.data('id') }, { $set:
+          {
+            place: 'supermarket'
+          }
+        });
+      }
+    });
+  }
+
+  Template.productListItem.rendered = function() {
+    var templateInstance = this;
+    templateInstance.$('.draggable').draggable({
+      cursor: 'move',
+      helper: 'clone'
+    });
+  }
 }
 
 if (Meteor.isServer) {
   Meteor.startup(function() {
-    if (Products.find().count() == 0) {
-      _.times(10, function(i) {
-        Products.insert({
-          name: 'Product#' + i,
-          img: '/product_' + i + '.jpg',
-          place: 'fridge'
-        });
-      });
-    }
+    Products.remove({});
+    Products.insert({
+      name: 'Milk',
+      img: '/milk.jpg',
+      place: 'fridge'
+    });
+
+    Products.insert({
+      name: 'Bread',
+      img: '/bread.jpg',
+      place: 'supermarket'
+    });
   });
 }

@@ -1,10 +1,9 @@
 <head>
   <title>myFridge</title>
+  <script href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
-
   {{> container}}
 </body>
 
@@ -22,6 +21,12 @@
 
 <template name="fridge">
   <div id="fridge">
+    <img class="img-responsive" src="/empty-fridge.jpg"/>
+    <ul>
+    {{#each products}}
+      <li>{{> productListItem}}</li>
+    {{/each}}
+    </ul>
   </div>
 </template>
 

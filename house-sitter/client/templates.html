@@ -10,6 +10,12 @@
 </body>
 
 <template name='selectHouse'>
+  <select id="select_house">
+    <option value="" {{isSelected}}></option>
+    {{#each houses}}
+      <option value="{{_id}}" {{isSelected}}>{{name}}</option>
+    {{/each}}
+  </select>
 </template>
 
 <template name='showHouse'>

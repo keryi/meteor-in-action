@@ -24,6 +24,12 @@ Template.plantDetails.events({
   'click button.water': function(e, t) {
     var plantId = $(e.currentTarget).attr('data-id');
     Session.set(plantId, true);
+    var lastVisit = new Date();
+    Houses.update({_id: Session.get('selectedHouse')}, {
+      $set: {
+        lastVisit: lastVisit
+      }
+    });
   }
 });
 

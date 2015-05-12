@@ -21,6 +21,7 @@
 <template name='showHouse'>
   {{#with house}}
     <h2>Taking care of {{name}}'s house</h2>
+    <p>Last Visit: {{lastVisit}}</p>
     {{#each plants}}
       {{> plantDetails}}
     {{/each}}

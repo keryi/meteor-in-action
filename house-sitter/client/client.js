@@ -9,7 +9,7 @@ Template.selectHouse.helpers({
 });
 
 Template.selectHouse.events({
-  'change #selectHouse': function(e, t) {
+  'change #select_house': function(e, t) {
     Session.set('selectedHouse', e.currentTarget.value);
   }
 });
@@ -39,3 +39,19 @@ Template.plantDetails.helpers({
     return Session.get(plantId) ? 'disabled' : '';
   }
 });
+
+Template.houseForm.events({
+  'click #save_house': function(e, t) {
+    e.preventDefault();
+    var name = $("input[id=house_name]").val();
+    var color = $("input[id=plant_color]").val();
+    var instruction = $("input[id=plant_instruction]").val();
+
+    Session.set('selectedHouse', Houses.insert({
+      name: name,
+      plants:[
+        { color: color, instructions: instruction }
+      ]
+    }));
+  }
+})

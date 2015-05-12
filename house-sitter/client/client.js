@@ -54,4 +54,12 @@ Template.houseForm.events({
       ]
     }));
   }
-})
+});
+
+Template.showHouse.events({
+  'click #delete': function(e, t) {
+    if (confirm('Are you sure to delete this house?')) {
+      Houses.remove(this._id);
+    }
+  }
+});

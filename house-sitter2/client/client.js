@@ -9,7 +9,7 @@ Session.setDefault('selectedHouseId', '');
 
 updateLocalHouse = function(id, modifier) {
   LocalHouse.update({
-    _id: id,
+    _id: id
   }, modifier);
 }
 
@@ -69,7 +69,7 @@ Template.plantDetails.helpers({
 Template.houseForm.events({
   'keyup input#house_name': function(e, t) {
     e.preventDefault();
-    var modifier = { $set: { name: e.currentTarget.value } };
+    var modifier = { $set: { name: e.currentTarget.value, status: 'unsaved' } };
     updateLocalHouse(Session.get('selectedHouseId'), modifier);
   },
 
@@ -79,18 +79,38 @@ Template.houseForm.events({
       color: '',
       instructions: ''
     };
-    var modifier = { $push: { plants: newPlant } };
+    var modifier = { $push: { plants: newPlant, status: 'unsaved' } };
     updateLocalHouse(Session.get('selectedHouseId'), modifier);
   },
 
   'click #save_house': function(e, t) {
     e.preventDefault();
     var id = Session.get('selectedHouseId');
-    var modifier = { $set: { lastsave: new Date() } };
+    var modifier = { $set: { lastsave: new Date(), status: 'saved' } };
     updateLocalHouse(id, modifier);
     Houses.upsert({ _id: id }, LocalHouse.findOne(id));
   }
 });
+
+Template.houseForm.created = function() {
+  this.autorun(function() {
+    var localHouse = LocalHouse.findOne(Session.get('selectedHouseId'));
+    var dbHouse = Houses.findOne(Session.get('selectedHouseId'));
+    if (localHouse && localHouse.status === 'unsaved') {
+      Session.set('notification', {
+        type: 'reminder',
+        text: 'Remember to save your changes'
+      });
+    } else if(dbHouse && dbHouse.lastsave > localHouse.lastsave) {
+      Session.set('notification', {
+        type: 'warning',
+        text: 'This document has been changed in the database'
+      });
+    } else {
+      Session.set('notification', '');
+    }
+  });
+}
 
 Template.showHouse.events({
   'click #delete': function(e, t) {
@@ -108,6 +128,7 @@ Template.plantFieldSet.events({
     var prop = 'plants.' + index + '.' + field;
     var modifier = { $set: {} };
     modifier['$set'][prop] = e.target.value;
+    modifier['$set'].status = 'unsaved';
     updateLocalHouse(Session.get('selectedHouseId'), modifier);
   },
 
@@ -116,7 +137,13 @@ Template.plantFieldSet.events({
     var index = e.target.getAttribute('data-index');
     var plants = Template.parentData(1).plants;
     plants.splice(index, 1);
-    var modifier = { $set: { plants: plants } };
+    var modifier = { $set: { plants: plants, status: 'unsaved' } };
     updateLocalHouse(Session.get('selectedHouseId'), modifier);
+  }
+});
+
+Template.notificationArea.helpers({
+  notification: function() {
+    return Session.get('notification');
   }
 });

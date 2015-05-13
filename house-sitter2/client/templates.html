@@ -4,6 +4,7 @@
 
 <body>
   <h1>The House Sitter App</h1>
+  {{> notificationArea}}
   {{> selectHouse}}
   {{> showHouse}}
   {{> houseForm}}
@@ -64,4 +65,12 @@
     Instruction: <input type="text" class="instructions" value="{{instructions}}" data-index="{{index}}"/><br/>
     <button class="remove-plant" data-index="{{index}}">Remove Plant</button>
   </fieldset>
+</template>
+
+<template name='notificationArea'>
+  {{#if notification}}
+    <p class="{{notification.type}}">
+      {{notification.text}}
+    </p>
+  {{/if}}
 </template>

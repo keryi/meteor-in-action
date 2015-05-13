@@ -7,6 +7,12 @@ var newHouse = {
 };
 Session.setDefault('selectedHouseId', '');
 
+updateLocalHouse = function(id, modifier) {
+  LocalHouse.update({
+    _id: id,
+  }, modifier);
+}
+
 Template.selectHouse.helpers({
   housesNameId: function() {
     return Houses.find({}, {fields: {name: 1, id: 1}});
@@ -32,6 +38,14 @@ Template.registerHelper('selectedHouse', function() {
   return LocalHouse.findOne(Session.get('selectedHouseId'));
 });
 
+Template.registerHelper('withIndex', function(list) {
+  return _.map(list, function(e, i) {
+    if (v === null) return;
+    v.index = i;
+    return v;
+  });
+});
+
 Template.plantDetails.events({
   'click button.water': function(e, t) {
     var plantId = $(e.currentTarget).attr('data-id');
@@ -53,6 +67,12 @@ Template.plantDetails.helpers({
 });
 
 Template.houseForm.events({
+  'keyup input#house_name': function(e, t) {
+    e.preventDefault();
+    var modifier = { $set: { name: e.currentTarget.value } };
+    updateLocalHouse(Session.get('selectedHouseId'), modifier);
+  },
+
   'click #save_house': function(e, t) {
     e.preventDefault();
     var name = $("input[id=house_name]").val();

@@ -47,7 +47,7 @@
   <form id="house_form">
     Name: <input type="text" id="house_name" placeholder="House's name" value="{{name}}" /><br/>
     Plant:<br/>
-    {{#each plants}}
+    {{#each withIndex plants}}
       {{> plantFieldSet}}
     {{/each}}
     <button class="add-plant">Add Plant</button>
@@ -60,8 +60,8 @@
 
 <template name='plantFieldSet'>
   <fieldset>
-    Color: <input type="text" id="plant_color" value="{{color}}"/><br/>
-    Instruction: <input type="text" id="plant_instruction" value="{{instructions}}"/><br/>
-    <button class="remove-plant">Remove Plant</button>
+    Color: <input type="text" id="plant_color" value="{{color}}" data-index={{index}}/><br/>
+    Instruction: <input type="text" id="plant_instruction" value="{{instructions}}" data-index={{index}}/><br/>
+    <button class="remove-plant" data-index="{{index}}">Remove Plant</button>
   </fieldset>
 </template>

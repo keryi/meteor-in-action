@@ -40,9 +40,9 @@ Template.registerHelper('selectedHouse', function() {
 
 Template.registerHelper('withIndex', function(list) {
   return _.map(list, function(e, i) {
-    if (v === null) return;
-    v.index = i;
-    return v;
+    if (e === null) return;
+    e.index = i;
+    return e;
   });
 });
 
@@ -73,18 +73,22 @@ Template.houseForm.events({
     updateLocalHouse(Session.get('selectedHouseId'), modifier);
   },
 
+  'click button.add-plant': function(e, t) {
+    e.preventDefault();
+    var newPlant = {
+      color: '',
+      instructions: ''
+    };
+    var modifier = { $push: { plants: newPlant } };
+    updateLocalHouse(Session.get('selectedHouseId'), modifier);
+  },
+
   'click #save_house': function(e, t) {
     e.preventDefault();
-    var name = $("input[id=house_name]").val();
-    var color = $("input[id=plant_color]").val();
-    var instruction = $("input[id=plant_instruction]").val();
-
-    Session.set('selectedHouse', Houses.insert({
-      name: name,
-      plants:[
-        { color: color, instructions: instruction }
-      ]
-    }));
+    var id = Session.get('selectedHouseId');
+    var modifier = { $set: { lastsave: new Date() } };
+    updateLocalHouse(id, modifier);
+    Houses.upsert({ _id: id }, LocalHouse.findOne(id));
   }
 });
 
@@ -93,5 +97,26 @@ Template.showHouse.events({
     if (confirm('Are you sure to delete this house?')) {
       Houses.remove(this._id);
     }
+  }
+});
+
+Template.plantFieldSet.events({
+  'keyup input.color, keyup input.instructions': function(e, t) {
+    e.preventDefault();
+    var index = e.target.getAttribute('data-index');
+    var field = e.target.getAttribute('class');
+    var prop = 'plants.' + index + '.' + field;
+    var modifier = { $set: {} };
+    modifier['$set'][prop] = e.target.value;
+    updateLocalHouse(Session.get('selectedHouseId'), modifier);
+  },
+
+  'click button.remove-plant': function(e, t) {
+    e.preventDefault();
+    var index = e.target.getAttribute('data-index');
+    var plants = Template.parentData(1).plants;
+    plants.splice(index, 1);
+    var modifier = { $set: { plants: plants } };
+    updateLocalHouse(Session.get('selectedHouseId'), modifier);
   }
 });

@@ -5,6 +5,8 @@ Meteor.publish 'distanceByMonth', ->
   initiated = false
 
   pipeline = [
+    $match:
+      userId: this.userId
     $group:
       _id:
         $month: '$workoutAt'
@@ -18,7 +20,7 @@ Meteor.publish 'distanceByMonth', ->
       distances[r._id] = r.distance
       subscription.added 'distanceByMonth', r._id, { distance: r.distance }
 
-  workoutHandle = Workouts.find().observeChanges
+  workoutHandle = Workouts.find({ userId: this.userId }).observeChanges
     added: (id, fields) ->
       return unless initiated
       idByMonth = new Date(fields.workoutAt).getMonth() + 1
@@ -38,9 +40,10 @@ Meteor.publish 'workouts', (options) ->
     limit: Number
   }
 
-  qry = {}
+  qry =
+    userId: this.userId
   qryOptions =
-    limit: options.limit
+    limit: options.limit || 10
     sort:
       workoutAt: 1
 

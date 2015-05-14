@@ -6,3 +6,5 @@
 
 meteor-platform
 coffeescript
+accounts-password
+accounts-ui

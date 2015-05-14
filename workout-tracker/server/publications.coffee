@@ -3,24 +3,23 @@ Meteor.publish 'distanceByMonth', ->
   db = MongoInternals.defaultRemoteCollectionDriver().mongo.db
   distances = {}
   initiated = false
+  userId = this.userId
 
   pipeline = [
-    $match:
-      userId: this.userId
-    $group:
-      _id:
-        $month: '$workoutAt'
-      distance:
-        $sum: '$distance'
+    { $match: userId: userId }
+    { $group:
+      _id: $month: '$workoutAt'
+      distance: $sum: '$distance' }
   ]
 
   db.collection('workouts').aggregate pipeline,
   Meteor.bindEnvironment (err, result) ->
+    console.log result
     _.each result, (r) ->
       distances[r._id] = r.distance
       subscription.added 'distanceByMonth', r._id, { distance: r.distance }
 
-  workoutHandle = Workouts.find({ userId: this.userId }).observeChanges
+  workoutHandle = Workouts.find({ userId: userId }).observeChanges
     added: (id, fields) ->
       return unless initiated
       idByMonth = new Date(fields.workoutAt).getMonth() + 1

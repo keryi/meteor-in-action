@@ -15,9 +15,9 @@ Template.workoutList.events
       Workouts.remove $(e.currentTarget).data('id')
   'submit #add_workout_form': (e, t) ->
     e.preventDefault()
-    Workouts.insert
-      workoutAt: new Date
-      distance: parseInt($('input#distance').val())
+    Meteor.call 'addWorkout', parseInt($('input#distance').val()), (err, res) ->
+      if err
+        alert err.reason
 
 Template.workoutList.helpers
   workouts: ->

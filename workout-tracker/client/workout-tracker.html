@@ -4,10 +4,14 @@
 
 <body>
   <div class="container">
+    {{#if currentUser}}
     <h1>Workout List</h1>
     {{> workoutList}}
     <h1>Distance By Month</h1>
     {{> distanceByMonthList}}
+    {{else}}
+    {{> loginButtons}}
+    {{/if}}
   </div>
 </body>
 

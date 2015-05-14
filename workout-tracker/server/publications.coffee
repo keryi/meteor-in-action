@@ -28,6 +28,9 @@ Meteor.publish 'distanceByMonth', ->
 
   initiated = true
 
+  subscription.onStop ->
+    workoutHandle.stop()
+
   subscription.ready()
 
 Meteor.publish 'workouts', (options) ->

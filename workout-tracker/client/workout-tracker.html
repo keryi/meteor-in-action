@@ -4,11 +4,62 @@
 
 <body>
   <div class="container">
-    <h1>Workout Tracker</h1>
-    {{> workoutTracker}}
+    <h1>Workout List</h1>
+    {{> workoutList}}
+    <h1>Distance By Month</h1>
+    {{> distanceByMonthList}}
   </div>
 </body>
 
-<template name='workoutTracker'>
+<template name='workoutList'>
+  <table>
+    <thead>
+      <tr>
+        <th>
+          Workout At
+        </th>
+        <th>
+          Distance
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each workouts}}
+        <tr>
+          <td>
+            {{workoutAt}}
+          </td>
+          <td>
+            {{distance}}
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</template>
 
+<template name='distanceByMonthList'>
+  <thead>
+    <tr>
+      <th>
+        Month
+      </th>
+      <th>
+        Distance
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {{#each distanceByMonth}}
+      <tr>
+        <td>
+          {{_id}}
+        </td>
+        <td>
+          {{distance}}
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
 </template>

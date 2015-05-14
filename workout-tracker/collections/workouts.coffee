@@ -1,1 +1,1 @@
-Workouts = new Mongo.Collection 'workouts'
+@Workouts = new Mongo.Collection 'workouts'

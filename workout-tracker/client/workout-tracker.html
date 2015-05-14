@@ -21,6 +21,9 @@
         <th>
           Distance
         </th>
+        <th>
+
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -32,10 +35,18 @@
           <td>
             {{distance}}
           </td>
+          <td>
+            <button href="#" data-id="{{_id}}" class="remove-workout">Remove</button>
+          </td>
         </tr>
       {{/each}}
     </tbody>
   </table>
+  <form id="add_workout_form">
+    Distance: <input id="distance" placeholder="distance"/>
+    <input type="submit" value="Add workout"/>
+  </form>
+  <button id="show_more">Show More</button>
 </template>
 
 <template name='distanceByMonthList'>

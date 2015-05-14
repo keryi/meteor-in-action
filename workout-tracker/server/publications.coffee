@@ -14,7 +14,6 @@ Meteor.publish 'distanceByMonth', ->
 
   db.collection('workouts').aggregate pipeline,
   Meteor.bindEnvironment (err, result) ->
-    console.log result
     _.each result, (r) ->
       distances[r._id] = r.distance
       subscription.added 'distanceByMonth', r._id, { distance: r.distance }

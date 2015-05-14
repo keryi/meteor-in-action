@@ -8,3 +8,4 @@ meteor-platform
 coffeescript
 accounts-password
 accounts-ui
+audit-argument-checks

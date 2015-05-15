@@ -1,6 +1,7 @@
 Meteor.startup ->
   if Profiles.find().count() == 0
-    Profiles.insert
-      name: Fake.user().name
-      img: "http://lorempixel.com/200/200/people/"
-      like: Fake.sentence()
+    _.times 20, ->
+      Profiles.insert
+        name: Fake.user().name
+        img: "http://lorempixel.com/200/200/people/"
+        like: Fake.sentence()

@@ -11,3 +11,4 @@ coffeescript
 twbs:bootstrap
 anti:fake
 manuelschoebel:wait-on-lib
+accounts-password

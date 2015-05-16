@@ -15,9 +15,3 @@
     console.log 'profile is viewed'
     Profiles.update { _id: @params._id }, { $inc: views: 1 }
     @next()
-  onBeforeAction: ->
-    console.log 'before action..'
-    unless Meteor.userId()
-      @render 'membersonly'
-    else
-      @next

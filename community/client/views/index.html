@@ -3,6 +3,14 @@
 </head>
 
 <template name='header'>
-  <a href="/">Home</a>
-  <a href="/about">About</a>
+  <ul class="nav nav-tabs">
+    <li class="{{isActiveRoute 'home'}}">
+      <a href="/">Home</a>
+    </li>
+    <li class="{{isActiveRoute 'about'}}">
+      {{#linkTo route='about'}}
+      About
+      {{/linkTo}}
+    </li>
+  </ul>
 </template>

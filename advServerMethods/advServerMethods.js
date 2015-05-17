@@ -42,6 +42,7 @@ if (Meteor.isServer) {
 
     sequential: function(val) {
       console.log('Calling wrapAsync method sequentially with val: ' + val);
+      this.unblock();
       Meteor.wrapAsync(block3s)(val);
       console.log('Sequential method return val: ' + val);
     }

@@ -12,12 +12,26 @@ if (Meteor.isClient) {
       Meteor.call('sequential', 'second', function(err, res) {
         console.log('Done second');
       });
-    },
+    }
+  });
 
+  Template.geo.events({
     'click #callGeoJsonForIp': function() {
-      Meteor.call('geoJsonForIp', '8.8.8.8', function(err, res) {
-        $('#geojson').html(JSON.stringify(res));
+      var ip = $('#geo_ip').val();
+      Meteor.call('geoJsonForIp', ip, function(err, res) {
+        if (err) {
+          Session.set('location', {error: err});
+        } else {
+          console.log(res);
+          Session.set('location', res);
+        }
       });
+    }
+  });
+
+  Template.geo.helpers({
+    location: function() {
+      return Session.get('location');
     }
   });
 }

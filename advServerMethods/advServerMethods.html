@@ -6,11 +6,25 @@
   <h1>Welcome to Meteor!</h1>
 
   {{> methods}}
+
+  <h1>GeoJson From IP</h1>
+  {{> geo}}
 </body>
 
 <template name="methods">
   <button id='callWrapAsyncMethod'>Call wrapAsyncMethod</button>
   <button id='callSequential'>Call sequential</button>
+</template>
+
+<template name='geo'>
+  <input type='text' id="geo_ip" />
   <button id='callGeoJsonForIp'>Call geoJsonForIp</button>
-  <p id="geojson"></p>
+  {{#with location}}
+  {{#if error}}
+    <p>Error {{error.errorType}}: {{error.message}}</p>
+  {{else}}
+    <p id="geo_result">IP: {{location.ip}}, City: {{location.city}},
+      Country: {{location.country}}</p>
+  {{/if}}
+  {{/with}}
 </template>

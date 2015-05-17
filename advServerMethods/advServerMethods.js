@@ -12,6 +12,12 @@ if (Meteor.isClient) {
       Meteor.call('sequential', 'second', function(err, res) {
         console.log('Done second');
       });
+    },
+
+    'click #callGeoJsonForIp': function() {
+      Meteor.call('geoJsonForIp', '8.8.8.8', function(err, res) {
+        $('#geojson').html(JSON.stringify(res));
+      });
     }
   });
 }
@@ -45,6 +51,14 @@ if (Meteor.isServer) {
       this.unblock();
       Meteor.wrapAsync(block3s)(val);
       console.log('Sequential method return val: ' + val);
+    },
+
+    geoJsonForIp: function(ip) {
+      console.log('Calling geoJsonForIp: ' + ip);
+      var apiUrl = 'http://www.telize.com/geoip/' + ip;
+      var res = HTTP.get(apiUrl).data;
+      console.log('Geojson: ' + res);
+      return res;
     }
   });
 }

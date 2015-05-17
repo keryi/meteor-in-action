@@ -36,6 +36,23 @@ var block3s = function(value, cb) {
   }, 3000);
 }
 
+var apiCall = function(apiUrl, callback) {
+  try {
+    var res = HTTP.get(apiUrl).data;
+    callback(null, res);
+  } catch (err) {
+    if (err.response) {
+      var code = err.response.data.code;
+      var msg = err.response.data.message;
+    } else {
+      var code = 500;
+      var msg = 'Cannot access the API';
+    }
+    var error = new Meteor.Error(code, msg);
+    callback(error, null);
+  }
+}
+
 if (Meteor.isServer) {
   Meteor.methods({
     wrapAsyncMethod: function() {
@@ -55,8 +72,9 @@ if (Meteor.isServer) {
 
     geoJsonForIp: function(ip) {
       console.log('Calling geoJsonForIp: ' + ip);
+      this.unblock();
       var apiUrl = 'http://www.telize.com/geoip/' + ip;
-      var res = HTTP.get(apiUrl).data;
+      var res = Meteor.wrapAsync(apiCall)(apiUrl);
       console.log('Geojson: ' + res);
       return res;
     }
